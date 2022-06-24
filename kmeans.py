@@ -70,3 +70,9 @@ class KMeans:
         for xyA, xyB in zip(xyAs, xyBs):
             con = mpatches.ConnectionPatch(xyA, xyB, coordsA="data", coordsB="data", arrowstyle="->")
             ax.add_artist(con)
+
+    def predict(self, x, y):
+        """Predict a cluster for a point x, y."""
+        dist = np.sqrt((x - self.x_means)**2 + (y - self.y_means)**2)
+        min_idx = np.where(dist == dist.min())[0]
+        return self.legend_labels[min_idx] if self.legend_labels is not None else min_idx
