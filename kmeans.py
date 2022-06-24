@@ -3,7 +3,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 
 class KMeans:
-    def __init__(self, x, y, *, k=2, means=None, labels=("", "")):
+    def __init__(self, x, y, *, k=2, means=None, labels=("", ""), legend_labels=None):
         self.x = x
         self.y = y
         self.k = k
@@ -15,7 +15,7 @@ class KMeans:
         self.k = len(means)
 
         self.xlabel, self.ylabel = labels
-
+        self.legend_labels = legend_labels
 
     def _random_means(self, seed=None):
         """Initialize random means"""
@@ -54,7 +54,10 @@ class KMeans:
             _, ax = plt.subplots()
 
         scttr = ax.scatter(self.x, self.y, c=self.cluster_ixs)
-        ax.legend(*scttr.legend_elements())
+        handles, labels = scttr.legend_elements()
+        if self.legend_labels is not None:
+            labels = self.legend_labels
+        ax.legend(handles, labels)
         ax.set_xlabel(self.xlabel)
         ax.set_ylabel(self.ylabel)
         
