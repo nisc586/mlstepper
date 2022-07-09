@@ -9,6 +9,6 @@ def test_step():
 
     km = KMeans(xs, ys, means=start_means)
     km.step()
-    # expected means are (-3, 0) and (3, 3)
-    assert np.equal(km.x_means, np.array([-3, 3])).all()
-    assert np.equal(km.y_means, np.array([0, 3])).all()
+    
+    np.testing.assert_array_equal(km.x_means, np.array([-3, 3]))
+    np.testing.assert_array_equal(km.y_means, np.array([0, 3]))
