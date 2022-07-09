@@ -3,7 +3,25 @@ import matplotlib.patches as mpatches
 import numpy as np
 
 class KMeans:
+    """Class that models the k-means algorithm.
+    
+    Available attributes are:
+    - k: The number of clusters
+    - x_means, y_means: x, and y coordinates of the cluster centers
+    - xlabel, ylabel: axis labels for x, and y axis
+    - legend_labels: labels corresponding to the clusters
+    """
+
     def __init__(self, x, y, *, k=2, means=None, labels=("", ""), legend_labels=None):
+        """Create a new model.
+        
+        Params:
+            x, y: x, and y coordinates of the data points
+            k: number of clusters
+            means: initial center points of the clusters, if None use random points
+            labels: labels for x, and y axis
+            legend_labels: names for the clusters
+        """
         self.x = x
         self.y = y
         self.k = k
@@ -31,6 +49,7 @@ class KMeans:
 
 
     def expectation_step(self):
+        """Assign all data points to a cluster."""
         dist_x = np.subtract.outer(self.x, self.x_means)
         dist_y = np.subtract.outer(self.y, self.y_means)
 
@@ -39,13 +58,16 @@ class KMeans:
 
 
     def minimization_step(self):
+        """Calculate new cluster center points."""
         for i in range(self.k):
             self.x_means[i] = np.mean(self.x[self.cluster_ixs == i])
             self.y_means[i] = np.mean(self.y[self.cluster_ixs == i])
 
 
     def show_step(self, ax=None):
-        """Perform a step, then return a scatter plot with old and new means marked."""
+        """Perform a step, then draws a scatter plot with old and new means marked.
+        
+        Creates a new subplot, if ax is None."""
         last_x_means = self.x_means.copy()
         last_y_means = self.y_means.copy()
 
