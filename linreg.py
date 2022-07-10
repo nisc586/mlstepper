@@ -2,8 +2,6 @@ import numpy as np
 from numpy import linalg
 import matplotlib.pyplot as plt
 
-# x = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5]
-# y = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]
 
 class LinearRegression:
     def __init__(self, x, y, regressors=None):
@@ -13,8 +11,7 @@ class LinearRegression:
         self.independent_var = np.array(x).reshape(-1, 1)
         self.dependent_var = np.array(y).reshape(-1, 1)
 
-        if regressors is None:
-            self.regressors = [lambda x: 1, lambda x: x]
+        self.regressors = [lambda x: 1, lambda x: x] if regressors is None else regressors
         
         self.x = np.hstack([
             np.vectorize(f)(self.independent_var)
@@ -29,9 +26,8 @@ class LinearRegression:
         self.coeffs = linalg.inv(self.x.T @ self.x) @ self.x.T @ y
         self.estimates = self.x @ self.coeffs
 
-        self.rss = np.sum((self.estimates - y.mean())**2)  # "explained" variance
-        self.tss = np.sum((y - y.mean())**2)  # "total" variance
-        self.r_square = 1 - self.rss/self.tss  # coefficient of determination
+        # R^2 is defined as the ratio between "explained" variance and "total" variance
+        self.r_square = np.sum((self.estimates - y.mean())**2) /np.sum((y - y.mean())**2)
     
 
     def show(self, ax=None):
@@ -51,3 +47,6 @@ class LinearRegression:
             beta * f(x)
             for beta, f in zip(self.coeffs, self.regressors)
         )
+    
+    def get_coeffs(self):
+        return self.coeffs.flatten().tolist()
