@@ -27,7 +27,7 @@ import math
 )
 def test_linear_regression(x, y):
     model = LinearRegression(x, y)
-    model.solve()
+    model.fit()
     alpha, beta = model.get_coeffs()
     assert math.isclose(alpha, 3, abs_tol = 0.01)
     assert math.isclose(beta, 0.5, abs_tol = 0.01)

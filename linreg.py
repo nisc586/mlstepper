@@ -19,7 +19,7 @@ class LinearRegression:
         ])
 
 
-    def solve(self):
+    def fit(self):
         # solve ordinary least squares
         y = self.dependent_var
 
@@ -31,14 +31,17 @@ class LinearRegression:
     
 
     def show(self, ax=None):
-        print("Coefficients:", self.coeffs)
-        print("R^2:", self.r_square)
-
         if ax is None:
             fig, ax = plt.subplots()
-        plt.scatter(self.independent_var, self.dependent_var)
-        plt.scatter(self.independent_var, self.estimates, color="red")
+        ax.scatter(self.independent_var, self.dependent_var)
 
+        p = np.linspace(min(self.independent_var), max(self.independent_var), 100)
+        q = sum(
+            beta * np.vectorize(f)(p)
+            for beta, f in zip(self.coeffs, self.regressors)
+        )
+
+        ax.plot(p, q, "-r")
         plt.show()
     
 
@@ -47,6 +50,6 @@ class LinearRegression:
             beta * f(x)
             for beta, f in zip(self.coeffs, self.regressors)
         )
-    
+
     def get_coeffs(self):
         return self.coeffs.flatten().tolist()
